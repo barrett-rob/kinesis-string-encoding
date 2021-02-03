@@ -1,0 +1,19 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.4.21'
+        awsSdkVersion = '2.14.26'
+        kotlinTestVersion = '3.4.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+    }
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+

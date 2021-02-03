@@ -1,0 +1,19 @@
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation "software.amazon.awssdk:kinesis:2.14.26"
+    implementation "software.amazon.awssdk:url-connection-client:2.14.26"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.5"
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '13'
+    }
+}
