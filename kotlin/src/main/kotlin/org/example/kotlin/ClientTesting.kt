@@ -18,12 +18,11 @@ import java.time.Instant
 
 
 fun main() {
-    val kinesisClientBuilder = KinesisClient.builder()
+    val kinesisClientBuilder = KinesisClient.builder().httpClient(UrlConnectionHttpClient.builder().buildWithDefaults(AttributeMap.builder().put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, true).build()))
     val endpointUrl: String? = System.getenv("ENDPOINT_URL")
     if (endpointUrl != null) {
         kinesisClientBuilder
             .endpointOverride(URI.create(endpointUrl))
-            .httpClient(UrlConnectionHttpClient.builder().buildWithDefaults(AttributeMap.builder().put(SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES, true).build()))
     }
     val kinesisClient = kinesisClientBuilder.build()
     val streamName = "reservation-stream"
@@ -65,13 +64,17 @@ class Client(
 
     fun publishAndReadString(publishingString: String) {
         val publishingBytes = publishingString.toByteArray(StandardCharsets.UTF_8)
-        println("\n\npublishing string: $publishingString, bytes: ${publishingBytes.contentToString()}")
+        println("\n")
+        println("publishing string: $publishingString, ")
+        println("            bytes: ${publishingBytes.contentToString()}")
         publishAndRead(publishingBytes)
     }
 
     fun publishAndReadBytes(publishingBytes: ByteArray) {
         val publishingString = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(publishingBytes))
-        println("\n\npublishing bytes: ${publishingBytes.contentToString()}, string $publishingString")
+        println("\n")
+        println("publishing bytes: ${publishingBytes.contentToString()}, ")
+        println("          string: $publishingString")
         publishAndRead(publishingBytes)
     }
 
@@ -83,7 +86,7 @@ class Client(
         val putRecordRequest = PutRecordRequest.builder().partitionKey("pk").streamName(streamName).data(SdkBytes.fromByteArray(publishingBytes)).build()
         kinesisClient.putRecord(putRecordRequest)
 
-        println("reading from kinesis stream [$streamName :: $streamArn]")
+        println("reading from kinesis stream [$streamName]")
         val getShardIteratorRequest = GetShardIteratorRequest.builder().streamName(streamName).shardId(shardId).shardIteratorType(ShardIteratorType.AT_TIMESTAMP).timestamp(startAt).build()
         val shardIterator = kinesisClient.getShardIterator(getShardIteratorRequest).shardIterator()
         val getRecordsResponse = kinesisClient.getRecords(GetRecordsRequest.builder().shardIterator(shardIterator).build())
