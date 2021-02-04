@@ -1,0 +1,13 @@
+{
+  "name": "kinesis-string-encoding-nodejs",
+  "version": "1.0",
+  "main": "clientTesting.js",
+  "repository": "git@github.com:barrett-rob/kinesis-string-encoding.git",
+  "scripts": {
+    "client-test": "node clientTesting.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.491.0"
+  }
+}
